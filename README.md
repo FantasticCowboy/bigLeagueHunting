@@ -4,7 +4,7 @@ This game will help me get familar with ebiten and hone my skills in game develo
 
 I want this game to be similar to duck shooter https://softfamous.com/wp-content/uploads/2018/10/Duck-Shooter.jpg.
 
-The first iteration of this game will be red square will appear on the screen slowly. The player will then shoot the square and gain points. The concept art can be found here. https://docs.google.com/presentation/d/1uJ5Ls6_tUSrG_hbFxt3fMM18Wc2cxvzXtAcdGeCwass/edit#slide=id.p
+The first iteration of this game will have red squares that will appear on the screen slowly. The player will then shoot the squares and gain points. The concept art can be found here. https://docs.google.com/presentation/d/1uJ5Ls6_tUSrG_hbFxt3fMM18Wc2cxvzXtAcdGeCwass/edit#slide=id.p
 
 For this initial version, there will be three states for the game - title, playing, and game over.
 
@@ -21,7 +21,7 @@ For this intitial version to run properly, the following objects and their respe
   - Pause? - do this later on
   - Game Over
 
-Because golang uses composition instead of inheritance, I should make the following sub-classes.
-  - Sprite
-    - 2d image
-    - Translate/Rotation/Resizing
+Below is an otuline of the developement pathway for this game
+
+1. Create way to rapidly test things
+2. Create translation engine to move objects around the screen based on speed, acceleration, and position

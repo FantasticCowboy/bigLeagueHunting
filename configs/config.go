@@ -1,6 +1,6 @@
 package configs
 
 const (
-	Width  = 200
-	Height = 640
+	Width  = 1920
+	Height = 1080
 )
