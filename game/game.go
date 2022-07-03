@@ -7,28 +7,37 @@ import (
 )
 
 type Game struct {
-	idToObjects map[int64]interfaces.Updatable
+	idToUpdatable map[int64]interfaces.Updatable
+}
+
+// Note. Returns nil if there is no object with the ID
+func (g *Game) GetUpdatable(id int64) interfaces.Updatable {
+	return CreateGame().idToUpdatable[id]
+}
+
+func (g *Game) RemoveUpdateable(id int64) {
+	delete(g.idToUpdatable, id)
+}
+
+func (g *Game) AddUpdatable(obj interfaces.Updatable) {
+	g.idToUpdatable[obj.GetId()] = obj
 }
 
 func CreateGame() (g *Game) {
 	g = new(Game)
-	g.idToObjects = make(map[int64]interfaces.Updatable)
+	g.idToUpdatable = make(map[int64]interfaces.Updatable)
 	return
 }
 
-func (g *Game) AddObject(obj interfaces.Updatable) {
-	g.idToObjects[obj.GetId()] = obj
-}
-
 func (g *Game) Update() error {
-	for _, obj := range g.idToObjects {
+	for _, obj := range g.idToUpdatable {
 		obj.Update()
 	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for _, obj := range g.idToObjects {
+	for _, obj := range g.idToUpdatable {
 		obj.Draw(screen)
 	}
 }

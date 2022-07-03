@@ -9,7 +9,7 @@ type Rectangle struct {
 	bottomLeft  *Point
 }
 
-func CreateQuadralateral(
+func CreateQuadrilateral(
 	topLeft *Point,
 	topRight *Point,
 	bottomRight *Point,
