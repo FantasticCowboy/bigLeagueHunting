@@ -7,7 +7,21 @@ import (
 )
 
 type Game struct {
+	// List of all things that can be updated
 	idToUpdatable map[int64]interfaces.Updatable
+
+	// List of all things that are collidables
+	idToCollidable map[int64]interfaces.BasicObject
+}
+
+func (g *Game) CheckAndHandleCollisions() {
+	for _, obj := range g.idToCollidable {
+		obj.CheckAndHandleCollisions()
+	}
+}
+
+func (g *Game) GetCollidable(id int64) interfaces.BasicObject {
+	return g.idToCollidable[id]
 }
 
 // Note. Returns nil if there is no object with the ID
@@ -17,6 +31,12 @@ func (g *Game) GetUpdatable(id int64) interfaces.Updatable {
 
 func (g *Game) RemoveUpdateable(id int64) {
 	delete(g.idToUpdatable, id)
+	delete(g.idToCollidable, id)
+}
+
+func (g *Game) AddCollidable(obj interfaces.BasicObject) {
+	g.AddUpdatable(obj)
+	g.idToCollidable[obj.GetId()] = obj
 }
 
 func (g *Game) AddUpdatable(obj interfaces.Updatable) {

@@ -17,9 +17,10 @@ type BasicObject interface {
 	Draw(screen *ebiten.Image)
 	Destroy()
 	GetId() int64
-	AddCollidable(id int64)
+	AddCollidable(id int64, handler func(*BasicObject))
 	RemoveCollidable(id int64)
 	GetHitbox() *hitbox.Hitbox
+	CheckAndHandleCollisions()
 }
 
 type PathGenerator interface {
