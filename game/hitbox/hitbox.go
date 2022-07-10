@@ -3,21 +3,48 @@ package hitbox
 import "github.com/FantasticCowboy/bigLeagueHunting/game/geometry"
 
 type Hitbox struct {
-	box geometry.Rectangle
+	box      *geometry.Rectangle
+	position *geometry.Point
 }
 
-func CreateHitBox(box geometry.Rectangle) *Hitbox {
+func (hitbox *Hitbox) UpdatePosition(newPos *geometry.Point) {
+	xStart, yStart := hitbox.box.GetTopLeftCorner().GetCords()
+	xEnd, yEnd := hitbox.box.GetBottomRight().GetCords()
+	xOffset := hitbox.position.GetX() - newPos.GetX()
+	yOffset := hitbox.position.GetY() - newPos.GetY()
+
+	hitbox.box = geometry.CreateRectangeCorners(
+		xStart+xOffset, xEnd+xOffset,
+		yStart+yOffset, yEnd+yOffset,
+	)
+	hitbox.position = newPos
+}
+
+func (hitbox *Hitbox) GetRectangle() *geometry.Rectangle {
+	return hitbox.box
+}
+
+func CreateHitbox(box *geometry.Rectangle, position *geometry.Point) *Hitbox {
 	h := Hitbox{}
-	h.box = box
+	h.position = position
+	xWidth := box.GetTopLeftCorner().GetX() - box.GetTopRight().GetX()
+	yLength := box.GetTopLeftCorner().GetY() - box.GetBottomLeft().GetY()
+	xStart, yStart := box.GetTopLeftCorner().GetCords()
+	xEnd, yEnd := box.GetBottomRight().GetCords()
+
+	h.box = geometry.CreateRectangeCorners(
+		xStart-(xWidth/2), yStart-(yLength/2),
+		xEnd+(xWidth/2), yEnd+(yLength/2),
+	)
 	return &h
 }
 
-func CreateHitBoxCorners(xStart float64,
+func CreateHitboxCorners(xStart float64,
 	xEnd float64,
 	yStart float64,
 	yEnd float64) *Hitbox {
 	h := Hitbox{}
-	h.box = *geometry.CreateRectangeCorners(xStart, yStart, xEnd, yEnd)
+	h.box = geometry.CreateRectangeCorners(xStart, yStart, xEnd, yEnd)
 	return &h
 }
 

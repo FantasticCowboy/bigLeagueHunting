@@ -4,21 +4,20 @@ import (
 	"github.com/FantasticCowboy/bigLeagueHunting/game"
 	"github.com/FantasticCowboy/bigLeagueHunting/game/geometry"
 	"github.com/FantasticCowboy/bigLeagueHunting/game/hitbox"
-	"github.com/FantasticCowboy/bigLeagueHunting/game/interfaces"
 	"github.com/FantasticCowboy/bigLeagueHunting/game/sprite"
 	"github.com/FantasticCowboy/bigLeagueHunting/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type BasicObject struct {
-	id             int64
-	sprite         *sprite.SpriteController
-	hitbox         *hitbox.Hitbox
-	gameState      *game.Game
-	pathGenerator  *interfaces.PathGenerator
-	collidables    map[int64]func(*BasicObject)
-	imagePosition  *geometry.Point
-	hitboxPosition *geometry.Point
+	id                int64
+	spriteController  *sprite.SpriteController
+	hitbox            *hitbox.Hitbox
+	hitboxProportions *geometry.Rectangle
+	gameState         *game.Game
+	collidables       map[int64]func(*BasicObject)
+	spritePosition    *geometry.Point
+	hitboxPosition    *geometry.Point
 }
 
 func CreateEmptyBasicObj(gameState *game.Game) *BasicObject {
@@ -30,16 +29,19 @@ func CreateEmptyBasicObj(gameState *game.Game) *BasicObject {
 }
 
 func (obj *BasicObject) Update() {
-	obj.CheckAndHandleCollisions()
-
-	if obj.sprite != nil {
-		obj.sprite.Update()
+	if obj.hitbox != nil {
+		obj.hitbox.UpdatePosition(obj.hitboxPosition)
+		obj.CheckAndHandleCollisions()
+	}
+	if obj.spriteController != nil {
+		obj.spriteController.SetPosition(obj.spritePosition.GetCords())
+		obj.spriteController.Update()
 	}
 }
 
 func (obj *BasicObject) Draw(screen *ebiten.Image) {
-	if obj.sprite != nil {
-		obj.sprite.Draw(screen)
+	if obj.spriteController != nil {
+		obj.spriteController.Draw(screen)
 	}
 }
 
