@@ -7,7 +7,8 @@ import (
 	"github.com/FantasticCowboy/bigLeagueHunting/assets"
 	"github.com/FantasticCowboy/bigLeagueHunting/configs"
 	"github.com/FantasticCowboy/bigLeagueHunting/game"
-	"github.com/FantasticCowboy/bigLeagueHunting/game/gameObjects"
+	gameObjects "github.com/FantasticCowboy/bigLeagueHunting/game/gameObjects/basicObject"
+	"github.com/FantasticCowboy/bigLeagueHunting/game/geometry"
 	"github.com/FantasticCowboy/bigLeagueHunting/game/hitbox"
 	sprite "github.com/FantasticCowboy/bigLeagueHunting/game/sprite"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -24,7 +25,7 @@ func main() {
 
 	hitbox1 := hitbox.CreateHitBoxCorners(0, 10, 0, 10)
 	hitbox2 := hitbox.CreateHitBoxCorners(0, 10, 0, 10)
-	hitbox3 := hitbox.CreateHitBoxCorners(100, 1000, 100, 1000)
+	hitbox3 := hitbox.CreateHitBoxCorners(100, 1000, 100, 1000, geometry.CreatePoint(0, 0))
 
 	tmp := gameObjects.BasicObject{}
 

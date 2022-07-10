@@ -1,6 +1,10 @@
 package gameObjects
 
-import "github.com/FantasticCowboy/bigLeagueHunting/game"
+import (
+	"github.com/FantasticCowboy/bigLeagueHunting/game"
+	"github.com/FantasticCowboy/bigLeagueHunting/game/geometry"
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 // Controlller to change the state of a basic object
 type basicObjectController struct {
@@ -14,7 +18,10 @@ type basicObjectController struct {
 }
 
 func CreateBasicObjectController(
-	xPos, yPos, xSpeed, ySpeed, xAcceleartion, yAcceleration float64, gameState *game.Game,
+	xPos, yPos, xSpeed, ySpeed, xAcceleartion, yAcceleration float64,
+	gameState *game.Game,
+	img *ebiten.Image,
+	hitbox geometry.Rectangle,
 ) *basicObjectController {
 
 	controller := basicObjectController{}
@@ -25,7 +32,14 @@ func CreateBasicObjectController(
 	controller.XAcceleration = xAcceleartion
 	controller.YAcceleration = yAcceleration
 
-	controller.basicObject = CreateEmptyBasicObj(gameState)
+	pos := geometry.CreatePoint(xPos, yPos)
+	collidables := make(map[int64]func(*BasicObject))
+	controller.basicObject = CreateBasicObject(
+		img,
+		hitbox,
+		collidables,
+		pos,
+		gameState)
 
 	return &controller
 }
@@ -35,7 +49,6 @@ func (controler *basicObjectController) Update() {
 	controler.YSpeed += controler.YAcceleration
 	controler.XPos += controler.XSpeed
 	controler.YPos += controler.YSpeed
-
 	controler.basicObject.SetHitboxPosition(controler.XPos, controler.YPos)
 	controler.basicObject.SetSpritePosition(controler.XPos, controler.YPos)
 	controler.basicObject.Update()

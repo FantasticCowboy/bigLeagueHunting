@@ -21,15 +21,21 @@ type BasicObject struct {
 
 func CreateBasicObject(
 	img *ebiten.Image,
-	hitbox geometry.Rectangle,
+	hitboxBox geometry.Rectangle,
 	collidables map[int64]func(*BasicObject),
 	position *geometry.Point,
 	gameState *game.Game,
-) {
+) *BasicObject {
 	obj := BasicObject{}
 	obj.id = utils.GenerateUid()
 	obj.spriteController = sprite.CreateSpriteController(img, position.GetX(), position.GetY())
-	obj.hitbox = hitbox.CreateHitbox()
+	obj.hitbox = hitbox.CreateHitbox(&hitboxBox, position)
+	obj.gameState = gameState
+	obj.collidables = collidables
+	obj.spritePosition = position
+	obj.hitboxPosition = geometry.CreatePoint(position.GetCords())
+
+	return &obj
 }
 
 func CreateEmptyBasicObj(gameState *game.Game) *BasicObject {

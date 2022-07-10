@@ -39,15 +39,6 @@ func CreateHitbox(box *geometry.Rectangle, position *geometry.Point) *Hitbox {
 	return &h
 }
 
-func CreateHitboxCorners(xStart float64,
-	xEnd float64,
-	yStart float64,
-	yEnd float64) *Hitbox {
-	h := Hitbox{}
-	h.box = geometry.CreateRectangeCorners(xStart, yStart, xEnd, yEnd)
-	return &h
-}
-
 func (hitbox *Hitbox) DetectHitPoint(p *geometry.Point) bool {
 	xStart, yStart := hitbox.box.GetTopLeftCorner().GetCords()
 	xEnd, yEnd := hitbox.box.GetBottomRight().GetCords()
