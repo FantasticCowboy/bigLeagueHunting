@@ -10,14 +10,26 @@ import (
 )
 
 type BasicObject struct {
-	id                int64
-	spriteController  *sprite.SpriteController
-	hitbox            *hitbox.Hitbox
-	hitboxProportions *geometry.Rectangle
-	gameState         *game.Game
-	collidables       map[int64]func(*BasicObject)
-	spritePosition    *geometry.Point
-	hitboxPosition    *geometry.Point
+	id               int64
+	spriteController *sprite.SpriteController
+	hitbox           *hitbox.Hitbox
+	gameState        *game.Game
+	collidables      map[int64]func(*BasicObject)
+	spritePosition   *geometry.Point
+	hitboxPosition   *geometry.Point
+}
+
+func CreateBasicObject(
+	img *ebiten.Image,
+	hitbox geometry.Rectangle,
+	collidables map[int64]func(*BasicObject),
+	position *geometry.Point,
+	gameState *game.Game,
+) {
+	obj := BasicObject{}
+	obj.id = utils.GenerateUid()
+	obj.spriteController = sprite.CreateSpriteController(img, position.GetX(), position.GetY())
+	obj.hitbox = hitbox.CreateHitbox()
 }
 
 func CreateEmptyBasicObj(gameState *game.Game) *BasicObject {
