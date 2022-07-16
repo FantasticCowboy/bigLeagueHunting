@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	"github.com/FantasticCowboy/bigLeagueHunting/game/hitbox"
+	"github.com/FantasticCowboy/bigLeagueHunting/depreciated/hitbox"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
