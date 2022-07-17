@@ -45,5 +45,5 @@ func (reticle *Reticle) Update(obj *game.Object) {
 }
 
 func (reticle *Reticle) Draw(obj *game.Object, screen *ebiten.Image) {
-
+	screen.DrawImage(obj.Img, obj.DrawOptions)
 }

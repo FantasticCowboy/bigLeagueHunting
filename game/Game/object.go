@@ -84,10 +84,9 @@ func (obj *Object) Update() {
 func (obj *Object) Draw(screen *ebiten.Image) {
 
 	obj.DrawOptions = &ebiten.DrawImageOptions{}
-	obj.Controller.Draw(obj, screen)
 	obj.FormatDrawOptions()
+	obj.Controller.Draw(obj, screen)
 
-	screen.DrawImage(obj.Img, obj.DrawOptions)
 }
 
 func (obj *Object) Destroy() {

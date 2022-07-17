@@ -7,6 +7,7 @@ import (
 
 	"github.com/FantasticCowboy/bigLeagueHunting/configs"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Game struct {
@@ -35,14 +36,18 @@ func (g *Game) Update() error {
 	for _, obj := range g.idToUpdatable {
 		obj.Update()
 	}
-	xPos, yPos := ebiten.CursorPosition()
-	log.Printf("%v %v", xPos, yPos)
+
+	press := inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
+	if press {
+		log.Print("pressed!")
+	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	// TODO: sorting on every draw is probably very inefficient
 	screen.Fill(color.White)
+
 	objs := make([]*Object, 0)
 	for _, obj := range g.idToUpdatable {
 		objs = append(objs, obj)
