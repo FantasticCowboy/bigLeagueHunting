@@ -1,7 +1,9 @@
 package game
 
 import (
+	"image/color"
 	"log"
+	"sort"
 
 	"github.com/FantasticCowboy/bigLeagueHunting/configs"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -33,11 +35,22 @@ func (g *Game) Update() error {
 	for _, obj := range g.idToUpdatable {
 		obj.Update()
 	}
+	xPos, yPos := ebiten.CursorPosition()
+	log.Printf("%v %v", xPos, yPos)
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	// TODO: sorting on every draw is probably very inefficient
+	screen.Fill(color.White)
+	objs := make([]*Object, 0)
 	for _, obj := range g.idToUpdatable {
+		objs = append(objs, obj)
+	}
+	sort.Slice(objs, func(i, j int) bool {
+		return objs[i].RenderLevel < objs[j].RenderLevel
+	})
+	for _, obj := range objs {
 		obj.Draw(screen)
 	}
 }

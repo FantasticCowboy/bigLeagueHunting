@@ -1,6 +1,8 @@
 package game
 
 import (
+	"math"
+
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -33,7 +35,10 @@ type Object struct {
 	// If to draw the image with xPos,yPos in the center
 	// or if to draw the iamge with xPos,yPos in the
 	// top left corner
-	DrawInCenter bool
+	DrawInCenter   bool
+	RenderLevel    float64
+	XScale, YScale float64
+	Roation        float64
 }
 
 func (obj *Object) UpdatePositioning() {
@@ -43,18 +48,45 @@ func (obj *Object) UpdatePositioning() {
 	obj.YPos += obj.YSpeed
 }
 
+func (obj *Object) TranslateImage() {
+
+	if obj.DrawInCenter {
+		cos := math.Cos(obj.Roation)
+		sin := math.Sin(obj.Roation)
+
+		orgDx := float64(obj.Img.Bounds().Dx()) * obj.XScale / 2
+		orgDy := float64(obj.Img.Bounds().Dy()) * obj.YScale / 2
+
+		dx := obj.XPos - (orgDx*cos - orgDx*sin)
+		dy := obj.YPos - (orgDy*sin + orgDy*cos)
+
+		obj.DrawOptions.GeoM.Translate(
+			dx,
+			dy,
+		)
+	} else {
+		obj.DrawOptions.GeoM.Translate(obj.XPos, obj.YPos)
+	}
+}
+
+func (obj *Object) FormatDrawOptions() {
+	obj.DrawOptions.GeoM.Rotate(obj.Roation)
+
+	obj.DrawOptions.GeoM.Scale(obj.XScale, obj.YScale)
+
+	obj.TranslateImage()
+}
+
 func (obj *Object) Update() {
 	obj.Controller.Update(obj)
 }
 
 func (obj *Object) Draw(screen *ebiten.Image) {
+
 	obj.DrawOptions = &ebiten.DrawImageOptions{}
-	if obj.DrawInCenter {
-		obj.DrawOptions.GeoM.Translate(obj.XPos-float64(obj.Img.Bounds().Dx())/2, obj.YPos-float64(obj.Img.Bounds().Dy())/2)
-	} else {
-		obj.DrawOptions.GeoM.Translate(obj.XPos, obj.YPos)
-	}
 	obj.Controller.Draw(obj, screen)
+	obj.FormatDrawOptions()
+
 	screen.DrawImage(obj.Img, obj.DrawOptions)
 }
 

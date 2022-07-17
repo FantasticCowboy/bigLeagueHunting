@@ -1,25 +1,25 @@
 package assets
 
 import (
-	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"os"
+	"log"
 
-	"github.com/FantasticCowboy/bigLeagueHunting/utils"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 // TODO: embed images in native go code
 func ReadImage(file string) *ebiten.Image {
-	f, err := os.Open(file)
-	utils.FailIfError(err)
 
-	img, _, err := image.Decode(f)
+	img, _, err := ebitenutil.NewImageFromFile(file)
 
-	utils.FailIfError(err)
+	if err != nil {
+		log.Fatal("Could not read file " + file)
+	}
 
-	return ebiten.NewImageFromImage(img)
+	return img
 }
 
-var DuckImage *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/duck.png")
+var DuckImage *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/reticle.png")
+var Reticle *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/reticle.png")

@@ -19,7 +19,7 @@ func (duck *DuckController) Update(obj *game.Object) {
 }
 
 func (duck *DuckController) Draw(obj *game.Object, screen *ebiten.Image) {
-	screen.DrawImage(obj.Img, obj.DrawOptions)
+
 }
 func CreateDuck(xPos, yPos, xSpeed, ySpeed float64) *game.Object {
 	controller := DuckController{}
@@ -36,5 +36,9 @@ func CreateDuck(xPos, yPos, xSpeed, ySpeed float64) *game.Object {
 		YAcceleration: 0,
 		Controller:    &controller,
 		DrawInCenter:  true,
+		RenderLevel:   0,
+		XScale:        1,
+		YScale:        1,
+		Roation:       0,
 	}
 }
