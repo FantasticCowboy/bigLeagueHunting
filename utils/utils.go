@@ -14,3 +14,7 @@ func FailIfError(err error) {
 func GenerateUid() int64 {
 	return rand.Int63()
 }
+
+func GenerateRandomNumber(max float64) float64 {
+	return rand.Float64() * max
+}

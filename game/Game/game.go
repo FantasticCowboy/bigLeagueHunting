@@ -5,51 +5,80 @@ import (
 	"log"
 	"sort"
 
+	"github.com/FantasticCowboy/bigLeagueHunting/assets"
 	"github.com/FantasticCowboy/bigLeagueHunting/configs"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 type Game struct {
 	// List of all things that can be updated
-	idToUpdatable map[int64]*Object
+	IdToUpdatable map[int64]*Object
+
+	// Buffer of things to be added to idToUpdatable
+	AddBuffer map[int64]*Object
+
+	CurrentState State
 }
 
 func (g *Game) RemoveObject(id int64) {
-	delete(g.idToUpdatable, id)
+	delete(g.IdToUpdatable, id)
+	delete(g.AddBuffer, id)
+}
+
+func (g *Game) TransferBuffer() {
+	for _, obj := range g.AddBuffer {
+		g.IdToUpdatable[obj.Id] = obj
+	}
+	for k := range g.AddBuffer {
+		delete(g.AddBuffer, k)
+	}
+}
+
+func (g *Game) GetObject(id int64) *Object {
+	return g.IdToUpdatable[id]
 }
 
 func (g *Game) AddObject(obj *Object) {
-	if _, ok := g.idToUpdatable[obj.Id]; ok {
+	if _, ok := g.IdToUpdatable[obj.Id]; ok {
 		log.Fatalf("Duplicate add for the object")
 	}
-	g.idToUpdatable[obj.Id] = obj
+	if _, ok := g.AddBuffer[obj.Id]; ok {
+		log.Fatalf("Duplicate add for the object")
+	}
+	g.AddBuffer[obj.Id] = obj
 }
 
 func CreateGame() (g *Game) {
 	g = new(Game)
-	g.idToUpdatable = make(map[int64]*Object)
+	g.IdToUpdatable = make(map[int64]*Object)
+	g.AddBuffer = make(map[int64]*Object)
 	return
 }
 
 func (g *Game) Update() error {
-	for _, obj := range g.idToUpdatable {
+	g.CurrentState.Update()
+	g.TransferBuffer()
+
+	for _, obj := range g.IdToUpdatable {
 		obj.Update()
 	}
 
-	press := inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft)
-	if press {
-		log.Print("pressed!")
-	}
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	// TODO: sorting on every draw is probably very inefficient
-	screen.Fill(color.White)
+	screen.Fill(color.RGBA{11, 127, 171, 255})
+
+	drawOptions := &ebiten.DrawImageOptions{}
+	drawOptions.GeoM.Scale(
+		configs.Width/float64(assets.Background.Bounds().Dx()),
+		configs.Height/float64(assets.Background.Bounds().Dy()),
+	)
+	screen.DrawImage(assets.Background, drawOptions)
 
 	objs := make([]*Object, 0)
-	for _, obj := range g.idToUpdatable {
+	for _, obj := range g.IdToUpdatable {
 		objs = append(objs, obj)
 	}
 	sort.Slice(objs, func(i, j int) bool {

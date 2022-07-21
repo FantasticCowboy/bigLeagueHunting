@@ -21,5 +21,6 @@ func ReadImage(file string) *ebiten.Image {
 	return img
 }
 
-var DuckImage *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/reticle.png")
+var Background *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/background.jpg")
+var DuckImage *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/duck.png")
 var Reticle *ebiten.Image = ReadImage("/Users/lukehobeika/Desktop/Projects/bigLeagueHunting/assets/reticle.png")

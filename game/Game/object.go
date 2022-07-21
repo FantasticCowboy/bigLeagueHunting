@@ -6,7 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-type ObjectController interface {
+type Controller interface {
 	Destroy(obj *Object)
 	Update(obj *Object)
 	Draw(obj *Object, screen *ebiten.Image)
@@ -30,7 +30,7 @@ type Object struct {
 	YAcceleration float64
 
 	// Manipulate the object's attributes and draws the object
-	Controller ObjectController
+	Controller Controller
 
 	// If to draw the image with xPos,yPos in the center
 	// or if to draw the iamge with xPos,yPos in the
@@ -39,6 +39,7 @@ type Object struct {
 	RenderLevel    float64
 	XScale, YScale float64
 	Roation        float64
+	Visible        bool
 }
 
 func (obj *Object) UpdatePositioning() {
@@ -82,7 +83,9 @@ func (obj *Object) Update() {
 }
 
 func (obj *Object) Draw(screen *ebiten.Image) {
-
+	if !obj.Visible {
+		return
+	}
 	obj.DrawOptions = &ebiten.DrawImageOptions{}
 	obj.FormatDrawOptions()
 	obj.Controller.Draw(obj, screen)

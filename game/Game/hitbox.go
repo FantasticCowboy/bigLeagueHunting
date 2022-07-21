@@ -8,7 +8,8 @@ import (
 )
 
 type Hitbox struct {
-	Box image.Rectangle
+	Box     image.Rectangle
+	Visible bool
 }
 
 func (hitbox Hitbox) DetectHit(p *image.Point) bool {
@@ -16,11 +17,11 @@ func (hitbox Hitbox) DetectHit(p *image.Point) bool {
 }
 
 func (hitbox Hitbox) Draw(screen *ebiten.Image) {
-	options := ebiten.DrawImageOptions{}
-	rectangle := ebiten.NewImage(hitbox.Box.Dx(), hitbox.Box.Dy())
-
-	rectangle.Fill(color.Black)
-	options.GeoM.Translate(float64(hitbox.Box.Min.X), float64(hitbox.Box.Min.Y))
-
-	screen.DrawImage(rectangle, &options)
+	if hitbox.Visible {
+		options := ebiten.DrawImageOptions{}
+		rectangle := ebiten.NewImage(hitbox.Box.Dx(), hitbox.Box.Dy())
+		options.GeoM.Translate(float64(hitbox.Box.Min.X), float64(hitbox.Box.Min.Y))
+		rectangle.Fill(color.Black)
+		screen.DrawImage(rectangle, &options)
+	}
 }
